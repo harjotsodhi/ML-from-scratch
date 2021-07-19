@@ -8,8 +8,10 @@ def format_reg(X, y, normalized):
     # add column vector of ones's for the intercept term
     if not normalized:
         try:
-            X[:,0] == np.ones(X.shape[0])
-        except:
+            if not all(X[:,0] == np.ones(X.shape[0])):
+                raise ValueError
+                
+        except ValueError:
             X = np.insert(X, 0, np.ones(X.shape[0]), axis=1)
 
     # reshape y, for matrix algebra

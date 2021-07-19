@@ -1,4 +1,5 @@
 import numpy as np
+#from ..solvers.gradient_descent import gradient_descent
 from ..helpers import helpers as hp
 
 
@@ -26,7 +27,8 @@ class Linear_regression(object):
 
 
     def fit(self, X, y, normalize=False):
-
+        '''
+        '''
         if self.fit_called:
             raise ValueError('Fit method already called')
 
@@ -36,42 +38,25 @@ class Linear_regression(object):
             X = hp.normalize(X)
 
         # format np.arrays for regression
-        X,y = hp.format_reg(X, y, normalize)
+        X,y = hp.format_reg(X, y, normalized=normalize)
 
         if self.method == "least_squares":
-
             # fit through OLS
             coef = self.ols(X, y)
 
         else:
-            pass
+            # fit through gradient descent
+            coef = gradient_descent(X, y)
 
-        # clean up
-        if not normalize:
-            self.intercept = coef[0]
-            self.coef = coef[1:].T
-        else:
-            self.intercept = 0
-            self.coef = coef.T
+        # convert to 1D array
+        self.coef = coef.T.flatten()
 
 
     def get_coef(self):
         '''
-        Return the fitted coefficients
+        Return the fitted coefficients (including intercept)
         '''
-
         if not self.fit_called:
             raise ValueError('Model not yet fit')
 
-        return self.coef.flatten()
-
-
-    def get_intercept(self):
-        '''
-        Return the fitted intercept
-        '''
-
-        if not self.fit_called:
-            raise ValueError('Model not yet fit')
-
-        return self.intercept.flatten()
+        return self.coef
