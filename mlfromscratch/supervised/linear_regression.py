@@ -1,8 +1,8 @@
 import numpy as np
-from .helpers import helpers as hp
+from ..helpers import helpers as hp
 
 
-class linear_regression(object):
+class Linear_regression(object):
     """
     Simple and multiple linear regression model.
     """
@@ -17,10 +17,11 @@ class linear_regression(object):
     def ols(self, X, y):
         '''
         Fit model using ordinary least squares method
+        Minimize SSE: argmin_b { ((y - (X @ b)).T) @ ((y - (X @ b))) }
 
-        coef_matrix = inverse(X.T @ X) @ X.T @ y
+        b = inverse(X.T @ X) @ X.T @ y
         '''
-        coef = np.linalg.inv(X_int.T.dot(X_int)).dot(X_int.T).dot(y)
+        coef = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y)
         return coef
 
 
@@ -48,10 +49,10 @@ class linear_regression(object):
         # clean up
         if not normalize:
             self.intercept = coef[0]
-            self.coef = coef[1:]
+            self.coef = coef[1:].T
         else:
             self.intercept = 0
-            self.coef = coef
+            self.coef = coef.T
 
 
     def get_coef(self):
@@ -62,7 +63,7 @@ class linear_regression(object):
         if not self.fit_called:
             raise ValueError('Model not yet fit')
 
-        return self.coef
+        return self.coef.flatten()
 
 
     def get_intercept(self):
@@ -73,4 +74,4 @@ class linear_regression(object):
         if not self.fit_called:
             raise ValueError('Model not yet fit')
 
-        return self.intercept
+        return self.intercept.flatten()
