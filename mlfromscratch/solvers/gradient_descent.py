@@ -5,6 +5,21 @@ import numpy as np
 class Gradient_descent(object):
     """
     Gradient descent algorithm to find optimal model parameters.
+
+    Parameters
+    ----------
+    gradient: function
+        gradient encoded as a function
+
+    cost: function
+        cost encoded as a function
+
+    max_iter: int, default=10000
+        maximum number of iterations allowed
+
+    abs_tol: float, default=1e-9
+        absolute convergence tolerance
+            end if: |cost_{n+1} - cost_{n}| < abs_tol
     """
     def __init__(self, gradient, cost, max_iter=10000, abs_tol=1e-9):
         try:
@@ -22,6 +37,17 @@ class Gradient_descent(object):
     def solve(self, X, y, learning_rate):
         """
         Solve for optimal parameters.
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+
+        y: np.array
+            response vector (m x 1)
+
+        learning_rate: float, between 0-1
+            gradient descent step size
         """
         m, n = X.shape
         iter_ = 0
