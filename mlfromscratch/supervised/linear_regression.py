@@ -7,6 +7,11 @@ from ..helpers import helpers as hp
 class Linear_regression(object):
     """
     Simple and multiple linear regression model.
+
+    Parameters
+    ----------
+    method: str, default='gradient_descent'
+        method for deriving parameters, 'least_squares' or 'gradient_descent'
     """
     def __init__(self, method="gradient_descent"):
         if method not in ("least_squares", "gradient_descent"):
@@ -22,6 +27,14 @@ class Linear_regression(object):
         Minimize SSE: argmin_b { ((y - (X @ b)).T) @ ((y - (X @ b))) }
 
         b = inverse(X.T @ X) @ X.T @ y
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+
+        y: np.array
+            response vector (m x 1)
         '''
         coef = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y)
         return coef
@@ -29,9 +42,19 @@ class Linear_regression(object):
 
     def gd(self, X, y):
         '''
-        Fit model using the gradient descent method
+        Fit model using the gradient descent method.
+        Encode cost and gradient as functions.
 
-        Encode cost and gradient as functions
+        cost = MSE => SSE/2m => ((y_pred - y).T @ (y_pred - y))/2m
+        gradient = partial derivative of MSE wrt coefs => (X.T @ (y_pred - y))/m
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+
+        y: np.array
+            response vector (m x 1)
         '''
         # MSE
         def cost(m, err): return (1/(2*m)) * err.T.dot(err)
@@ -46,6 +69,20 @@ class Linear_regression(object):
     def fit(self, X, y, normalize=False, learning_rate=0.01):
         '''
         Estimate the model parameters using the specified method.
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+
+        y: np.array
+            response vector (m x 1)
+
+        normalize: bool, default='False'
+            whether to normalize the feature matrix
+
+        learning_rate: float, between 0-1, default=0.01
+            gradient descent step size
         '''
         if self.fit_called:
             raise ValueError('Fit method already called')
@@ -64,6 +101,12 @@ class Linear_regression(object):
 
         else:
             # fit through gradient descent
+            try:
+                learning_rate <= 1
+                learning_rate >= 0
+            except:
+                raise ValueError("Learning rate must be between 0-1")
+
             coef = self.gd(X, y)
 
         # convert to 1D array
@@ -72,7 +115,12 @@ class Linear_regression(object):
 
     def get_coef(self, include_intercept=True):
         '''
-        Return the fitted coefficients (including intercept)
+        Return the fitted coefficients.
+
+        Parameters
+        ----------
+        include_intercept: bool, default='True'
+            whether to include the intercept coeff.
         '''
         if not self.fit_called:
             raise ValueError('Model not yet fit')
