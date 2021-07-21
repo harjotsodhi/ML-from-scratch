@@ -1,6 +1,7 @@
 import numpy as np
-#from ..solvers.gradient_descent import gradient_descent
+from ..solvers.gradient_descent import Gradient_descent
 from ..helpers import helpers as hp
+
 
 
 class Linear_regression(object):
@@ -17,7 +18,7 @@ class Linear_regression(object):
 
     def ols(self, X, y):
         '''
-        Fit model using ordinary least squares method
+        Fit model using the ordinary least squares method
         Minimize SSE: argmin_b { ((y - (X @ b)).T) @ ((y - (X @ b))) }
 
         b = inverse(X.T @ X) @ X.T @ y
@@ -26,8 +27,25 @@ class Linear_regression(object):
         return coef
 
 
-    def fit(self, X, y, normalize=False):
+    def gd(self, X, y):
         '''
+        Fit model using the gradient descent method
+
+        Encode cost and gradient as functions
+        '''
+        # MSE
+        def cost(m, err): return (1/(2*m)) * err.T.dot(err)
+        # gradient (partial derivative of MSE wrt coefs)
+        def gradient(m, X, err): return (1/m)*(X.T.dot(err))
+        # solve
+        solver = Gradient_descent(gradient, cost, max_iter=10000, abs_tol=1e-9)
+        coef = solver.solve(X, y, learning_rate=0.01)
+        return coef
+
+
+    def fit(self, X, y, normalize=False, learning_rate=0.01):
+        '''
+        Estimate the model parameters using the specified method.
         '''
         if self.fit_called:
             raise ValueError('Fit method already called')
@@ -46,17 +64,21 @@ class Linear_regression(object):
 
         else:
             # fit through gradient descent
-            coef = gradient_descent(X, y)
+            coef = self.gd(X, y)
 
         # convert to 1D array
         self.coef = coef.T.flatten()
 
 
-    def get_coef(self):
+    def get_coef(self, include_intercept=True):
         '''
         Return the fitted coefficients (including intercept)
         '''
         if not self.fit_called:
             raise ValueError('Model not yet fit')
 
-        return self.coef
+        if not include_intercept:
+            return self.coef[1:]
+
+        else:
+            return self.coef
