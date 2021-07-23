@@ -113,6 +113,19 @@ class Linear_regression(object):
         self.coef = coef.T.flatten()
 
 
+    def predict(self, X):
+        '''
+        Return the predicted value.
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+        '''
+        y_pred = X.dot(self.coef)
+        return y_pred
+
+
     def get_coef(self, include_intercept=True):
         '''
         Return the fitted coefficients.
