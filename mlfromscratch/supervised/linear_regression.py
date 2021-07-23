@@ -45,6 +45,7 @@ class Linear_regression(object):
         Fit model using the gradient descent method.
         Encode cost and gradient as functions.
 
+        _predict = X @ coef
         cost = MSE => SSE/2m => ((y_pred - y).T @ (y_pred - y))/2m
         gradient = partial derivative of MSE wrt coefs => (X.T @ (y_pred - y))/m
 
@@ -56,12 +57,14 @@ class Linear_regression(object):
         y: np.array
             response vector (m x 1)
         '''
+        # prediction function
+        def _predict(X, coef): return X.dot(coef)
         # MSE
-        def cost(m, err): return (1/(2*m)) * err.T.dot(err)
+        def cost(m, y, y_pred): return (1/(2*m)) * (y_pred-y).T.dot((y_pred-y))
         # gradient (partial derivative of MSE wrt coefs)
-        def gradient(m, X, err): return (1/m)*(X.T.dot(err))
+        def gradient(m, X, y, y_pred): return (1/m)*(X.T.dot((y_pred-y)))
         # solve
-        solver = Gradient_descent(gradient, cost, max_iter=10000, abs_tol=1e-9)
+        solver = Gradient_descent(gradient, cost, _predict, max_iter=10000, abs_tol=1e-9)
         coef = solver.solve(X, y, learning_rate=0.01)
         return coef
 
