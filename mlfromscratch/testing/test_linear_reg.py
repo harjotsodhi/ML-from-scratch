@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression as sklearn_lm
 from sklearn.datasets import make_regression
 
 
-def _test():
+def test():
 
     X, y = make_regression(n_samples=100000, n_features=100, n_informative=75,
                            n_targets=1, noise=0.2, random_state=42)
@@ -39,5 +39,4 @@ def _test():
 
 
 if __name__ == '__main__':
-
-    _test()
+    test()
