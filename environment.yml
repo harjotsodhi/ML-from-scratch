@@ -1,0 +1,6 @@
+name: ml_from_scratch_env
+channels:
+  - defaults
+dependencies:
+  - numpy
+  - scikit-learn
