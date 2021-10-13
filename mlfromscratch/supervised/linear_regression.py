@@ -16,12 +16,65 @@ class Linear_regression(object):
     def __init__(self, method="gradient_descent"):
         if method not in ("least_squares", "gradient_descent"):
             raise ValueError('Method param must be "least_squares" or "gradient_descent"')
-
         self.method = method
-        self.fit_called = False
 
 
-    def ols(self, X, y):
+    def fit(self, X, y, normalized=False, learning_rate=0.01):
+        '''
+        Estimate the model parameters using the specified method.
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+
+        y: np.array
+            response vector (m x 1)
+
+        normalized: bool
+            whether features are normalized
+            determines whether or not an intercept is needed.
+
+        learning_rate: float, default=0.01
+            gradient descent step size (range 0-1)
+        '''
+        # format np.arrays for regression
+        X,y = hp.format_reg(X, y, normalized=False)
+
+        if self.method == "least_squares":
+            # fit through OLS
+            coef = self._ols(X, y)
+
+        else:
+            # fit through gradient descent
+            try:
+                learning_rate <= 1
+                learning_rate >= 0
+            except:
+                raise ValueError("Learning rate must be between 0-1")
+
+            coef = self._gd(X, y)
+
+        # convert to 1D array
+        self.coef = coef.T.flatten()
+
+
+    def predict(self, X):
+        '''
+        Return the predicted value.
+
+        Parameters
+        ----------
+        X: np.array
+            feature matrix (m x n)
+        '''
+        y_pred = X.dot(self.coef)
+        return y_pred
+
+
+    ### Private methods ###
+
+    def _ols(self, X, y):
         '''
         Fit model using the ordinary least squares method
         Minimize SSE: argmin_b { ((y - (X @ b)).T) @ ((y - (X @ b))) }
@@ -40,7 +93,7 @@ class Linear_regression(object):
         return coef
 
 
-    def gd(self, X, y):
+    def _gd(self, X, y):
         '''
         Fit model using the gradient descent method.
         Encode cost and gradient as functions.
@@ -67,82 +120,3 @@ class Linear_regression(object):
         solver = Gradient_descent(gradient, cost, _predict, max_iter=10000, abs_tol=1e-9)
         coef = solver.solve(X, y, learning_rate=0.01)
         return coef
-
-
-    def fit(self, X, y, normalize=False, learning_rate=0.01):
-        '''
-        Estimate the model parameters using the specified method.
-
-        Parameters
-        ----------
-        X: np.array
-            feature matrix (m x n)
-
-        y: np.array
-            response vector (m x 1)
-
-        normalize: bool, default='False'
-            whether to normalize the feature matrix
-
-        learning_rate: float, between 0-1, default=0.01
-            gradient descent step size
-        '''
-        if self.fit_called:
-            raise ValueError('Fit method already called')
-
-        self.fit_called = True
-        # normalize
-        if normalize:
-            X = hp.normalize(X)
-
-        # format np.arrays for regression
-        X,y = hp.format_reg(X, y, normalized=normalize)
-
-        if self.method == "least_squares":
-            # fit through OLS
-            coef = self.ols(X, y)
-
-        else:
-            # fit through gradient descent
-            try:
-                learning_rate <= 1
-                learning_rate >= 0
-            except:
-                raise ValueError("Learning rate must be between 0-1")
-
-            coef = self.gd(X, y)
-
-        # convert to 1D array
-        self.coef = coef.T.flatten()
-
-
-    def predict(self, X):
-        '''
-        Return the predicted value.
-
-        Parameters
-        ----------
-        X: np.array
-            feature matrix (m x n)
-        '''
-        y_pred = X.dot(self.coef)
-        return y_pred
-
-
-    def get_coef(self, include_intercept=True):
-        '''
-        Return the fitted coefficients.
-
-        Parameters
-        ----------
-        include_intercept: bool, default='True'
-            whether to include the intercept coeff.
-        '''
-        if not self.fit_called:
-            raise ValueError('Model not yet fit')
-
-        if not include_intercept:
-            return self.coef[1:]
-
-        else:
-            return self.coef
