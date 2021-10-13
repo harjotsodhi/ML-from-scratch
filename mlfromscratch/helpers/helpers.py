@@ -1,6 +1,32 @@
 import numpy as np
 
 
+def mode(arr):
+    """
+    Calculate the mode.
+
+    Parameters
+    ----------
+    arr: np.array
+        vector (m x 1)
+    """
+    vals,counts = np.unique(arr, return_counts=True)
+    index = np.argmax(counts)
+    return arr[index]
+
+
+def single_class(arr):
+    """
+    Check whether all values are same.
+
+    Parameters
+    ----------
+    arr: np.array
+        vector (m x 1)
+    """
+    return np.all(arr == arr[0])
+
+
 def format_reg(X, y, normalized):
     '''
     Format np.arrays for regression.
