@@ -14,27 +14,28 @@ def test():
     reg_sklearn.fit(X, y)
 
     # check OLS
-    reg_ols = Linear_regression(method="least_squares")
+    reg_ols = Linear_regression(method="least_squares", normalized=False)
     reg_ols.fit(X, y)
 
     # check coefficients
-    np.testing.assert_allclose(reg_ols.get_coef()[1:], reg_sklearn.coef_,
+    np.testing.assert_allclose(reg_ols.coef[1:].flatten(), reg_sklearn.coef_,
                                 rtol=1e-04, atol=1e-04)
 
     # check intercept
-    np.testing.assert_allclose(reg_ols.get_coef()[0], reg_sklearn.intercept_,
+    np.testing.assert_allclose(reg_ols.coef[0].flatten(), reg_sklearn.intercept_,
                                 rtol=1e-04, atol=1e-04)
 
     # check GD
-    reg_GD = Linear_regression(method="gradient_descent")
+    reg_GD = Linear_regression(method="gradient_descent", normalized=False,
+                               learning_rate=0.01, max_iter=10000, abs_tol=1e-9)
     reg_GD.fit(X, y)
 
     # check coefficients
-    np.testing.assert_allclose(reg_GD.get_coef(include_intercept=False), reg_sklearn.coef_,
+    np.testing.assert_allclose(reg_GD.coef[1:].flatten(), reg_sklearn.coef_,
                                 rtol=1e-04, atol=1e-04)
 
     # check intercept
-    np.testing.assert_allclose(reg_GD.get_coef(include_intercept=True)[0], reg_sklearn.intercept_,
+    np.testing.assert_allclose(reg_GD.coef[0].flatten(), reg_sklearn.intercept_,
                                 rtol=1e-04, atol=1e-04)
 
 

@@ -12,14 +12,38 @@ class Linear_regression(object):
     ----------
     method: str, default='gradient_descent'
         method for deriving parameters, 'least_squares' or 'gradient_descent'
+
+    normalized: bool
+        whether features are normalized
+        determines whether or not an intercept is needed.
+
+    learning_rate: float, default=0.01
+        gradient descent step size (range 0-1)
+
+    max_iter: int, default=1000
+        maximum number of iterations for solver.
+
+    abs_tol: float, default=1e-9
+        absolute convergence tolerance for solver.
+        end if: |cost_{n+1} - cost_{n}| < abs_tol
     """
-    def __init__(self, method="gradient_descent"):
+    def __init__(self, method="gradient_descent", normalized=False,
+                 learning_rate=0.01, max_iter=1000, abs_tol=1e-9):
         if method not in ("least_squares", "gradient_descent"):
             raise ValueError('Method param must be "least_squares" or "gradient_descent"')
         self.method = method
+        try:
+            learning_rate <= 1
+            learning_rate >= 0
+        except:
+            raise ValueError("Learning rate must be between 0-1")
+        self.learning_rate = learning_rate
+        self.max_iter = max_iter
+        self.abs_tol = abs_tol
+        self.normalized = normalized
 
 
-    def fit(self, X, y, normalized=False, learning_rate=0.01):
+    def fit(self, X, y):
         '''
         Estimate the model parameters using the specified method.
 
@@ -30,16 +54,9 @@ class Linear_regression(object):
 
         y: np.array
             response vector (m x 1)
-
-        normalized: bool
-            whether features are normalized
-            determines whether or not an intercept is needed.
-
-        learning_rate: float, default=0.01
-            gradient descent step size (range 0-1)
         '''
         # format np.arrays for regression
-        X,y = hp.format_reg(X, y, normalized=False)
+        X,y = hp.format_reg(X, y, normalized=self.normalized)
 
         if self.method == "least_squares":
             # fit through OLS
@@ -47,29 +64,27 @@ class Linear_regression(object):
 
         else:
             # fit through gradient descent
-            try:
-                learning_rate <= 1
-                learning_rate >= 0
-            except:
-                raise ValueError("Learning rate must be between 0-1")
-
             coef = self._gd(X, y)
 
-        # convert to 1D array
-        self.coef = coef.T.flatten()
+        # extract coefficients
+        self.coef = coef
 
 
     def predict(self, X):
         '''
         Return the predicted value.
 
+        y_pred = (w * X) + b
+
         Parameters
         ----------
         X: np.array
             feature matrix (m x n)
         '''
+        # format np.arrays for regression
+        X = hp.format_reg(X, normalized=self.normalized)
         y_pred = X.dot(self.coef)
-        return y_pred
+        return y_pred.flatten()
 
 
     ### Private methods ###
@@ -98,9 +113,12 @@ class Linear_regression(object):
         Fit model using the gradient descent method.
         Encode cost and gradient as functions.
 
-        _predict = X @ coef
-        cost = MSE => SSE/2m => ((y_pred - y).T @ (y_pred - y))/2m
-        gradient = partial derivative of MSE wrt coefs => (X.T @ (y_pred - y))/m
+        prediction:
+            => X @ coef
+        cost = MSE:
+            => SSE/m => ((y_pred - y).T @ (y_pred - y))/m
+        gradient = partial derivative of MSE wrt coefs:
+            => (X.T @ (y_pred - y))/m
 
         Parameters
         ----------
@@ -111,12 +129,15 @@ class Linear_regression(object):
             response vector (m x 1)
         '''
         # prediction function
-        def _predict(X, coef): return X.dot(coef)
+        def gd_predict(X, coef): return X.dot(coef)
         # MSE
-        def cost(m, y, y_pred): return (1/(2*m)) * (y_pred-y).T.dot((y_pred-y))
+        def gd_cost(m, y, y_pred): return (1/m) * (y_pred-y).T.dot((y_pred-y))
         # gradient (partial derivative of MSE wrt coefs)
-        def gradient(m, X, y, y_pred): return (1/m)*(X.T.dot((y_pred-y)))
+        def gd_gradient(m, X, y, y_pred): return (1/m)*(X.T.dot((y_pred-y)))
         # solve
-        solver = Gradient_descent(gradient, cost, _predict, max_iter=10000, abs_tol=1e-9)
-        coef = solver.solve(X, y, learning_rate=0.01)
+        solver = Gradient_descent(gd_gradient, gd_cost, gd_predict,
+                                  learning_rate=self.learning_rate,
+                                  max_iter=self.max_iter, abs_tol=self.abs_tol)
+
+        coef = solver.solve(X, y)
         return coef
