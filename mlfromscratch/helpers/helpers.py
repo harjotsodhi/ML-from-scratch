@@ -27,7 +27,7 @@ def single_class(arr):
     return np.all(arr == arr[0])
 
 
-def format_reg(X, y, normalized):
+def format_reg(X, y=None, normalized=False):
     '''
     Format np.arrays for regression.
     '''
@@ -40,13 +40,16 @@ def format_reg(X, y, normalized):
         except ValueError:
             X = np.insert(X, 0, np.ones(X.shape[0]), axis=1)
 
-    # reshape y, for matrix algebra
-    try:
-        y.shape[1] == 1
-    except:
-        y = y.reshape(-1,1)
+    # reshape y, for matrix algebra, if y provided
+    if y is None:
+        return X
+    else:
+        try:
+            y.shape[1] == 1
+        except:
+            y = y.reshape(-1,1)
 
-    return X, y
+        return X, y
 
 
 def normalize(X):
