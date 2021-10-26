@@ -15,6 +15,20 @@ def mode(arr):
     return arr[index]
 
 
+def standardize(X):
+    """
+    Subtract the mean and scale to unit variance.
+
+    Parameters
+    ----------
+    X: np.array
+        matrix (m x n)
+    """
+    X_centered = X - np.mean(X, axis=0)
+    X_scaled = X_centered/np.std(X_centered, axis=0)
+    return X_scaled
+
+
 def single_class(arr):
     """
     Check whether all values are same.
