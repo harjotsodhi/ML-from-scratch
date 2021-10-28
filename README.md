@@ -66,7 +66,7 @@ model.predict(Z)
 The "mlfromscratch\\examples" subdirectory provides a variety of example implementations
 with real data. The output of the linear regression example is provided below:
 
-  $ python -m mlfromscratch.examples.linear_reg
+    $ python -m mlfromscratch.examples.linear_reg
 
 <p align="center">
     <img src="https://github.com/harjotsodhi/ML-from-scratch/blob/master/mlfromscratch/examples/output/linear_reg.png?raw=true" width="640"\>
