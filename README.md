@@ -60,11 +60,13 @@ from supervised.linear_regression import Linear_regression
 model = Linear_regression(method="gradient_descent", normalized=False,
                           learning_rate=0.01, max_iter=10000, abs_tol=1e-9)
 model.fit(X, y)
-model.predict(Z)
+y_pred = model.predict(Z)
 ```
 
 The "mlfromscratch\\examples" subdirectory provides a variety of example implementations
-with real data. The output of the linear regression example is provided below:
+with real data. The linear regression example shows the case of linear regression where
+we are interested in predicting our response based off just one explanatory feature.
+The resulting model can be seen visually below:
 
     $ python -m mlfromscratch.examples.linear_reg
 
