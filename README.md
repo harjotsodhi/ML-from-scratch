@@ -34,7 +34,9 @@ tested against the scikit-learn implementations.
     $ conda activate ml_from_scratch_env
 
 ## Implementations
-### Linear Regression
+### Supervised Learning
+
+#### Linear Regression
 
 Linear regression is a supervised learning technique used for modeling a continuous
 response variable as a linear function of one or more explanatory features. It can
