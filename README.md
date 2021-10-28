@@ -40,9 +40,7 @@ Linear regression is a supervised learning technique used for modeling a continu
 response variable as a linear function of one or more explanatory features. It can
 be formalized mathematically as follows:
 
-```math
-y = X \beta
-```
+![equation](https://latex.codecogs.com/gif.latex?y%20%3D%20X%5Cbeta)
 
     $ python -m mlfromscratch.examples.linear_reg
 
