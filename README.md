@@ -40,9 +40,33 @@ Linear regression is a supervised learning technique used for modeling a continu
 response variable as a linear function of one or more explanatory features. It can
 be formalized mathematically as follows:
 
-![equation](https://latex.codecogs.com/gif.latex?y%20%3D%20X%5Cbeta)
+![equation](https://latex.codecogs.com/gif.latex?y%20%3D%20Xw)
 
-    $ python -m mlfromscratch.examples.linear_reg
+Where the vector (N by 1) Y is a contains a continuous response variable for the
+N observations, the vector (N by M+1) X contains the M explanatory features plus
+a column of ones representing the "bias" (i.e., the intercept), and the vector (M+1 by 1)
+w contains the estimated parameters of the linear regression model.
+
+In linear regression, the model parameters can be estimated analytically through the method
+of ordinary least squares, or through numerical methods such as Gradient descent.
+This project's linear regression implementation includes options for solving both ways.
+
+This project's linear regression implementation makes estimating the model parameters
+and making predictions a piece of cake. An example implementation is provided below:
+
+```python
+from supervised.linear_regression import Linear_regression
+# example of fitting the model through gradient descent
+model = Linear_regression(method="gradient_descent", normalized=False,
+                          learning_rate=0.01, max_iter=10000, abs_tol=1e-9)
+model.fit(X, y)
+model.predict(Z)
+```
+
+The "mlfromscratch\\examples" subdirectory provides a variety of example implementations
+with real data. The output of the linear regression example is provided below:
+
+  $ python -m mlfromscratch.examples.linear_reg
 
 <p align="center">
     <img src="https://github.com/harjotsodhi/ML-from-scratch/blob/master/mlfromscratch/examples/output/linear_reg.png?raw=true" width="640"\>
