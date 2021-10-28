@@ -41,7 +41,7 @@ tested against the scikit-learn implementations.
     <img src="https://github.com/harjotsodhi/ML-from-scratch/blob/master/mlfromscratch/examples/output/linear_reg.png?raw=true" width="640"\>
 </p>
 <p align="center">
-    Figure 1: Linear regression model applied to a Diabetes dataset from Bradley Efron, Trevor Hastie, Iain Johnstone and Robert Tibshirani (2004) “Least Angle Regression,” Annals of Statistics (with discussion), 407-499.
+    Figure 1: Linear regression model applied to a Diabetes dataset (https://web.stanford.edu/~hastie/Papers/LARS/LeastAngle_2002.pdf).
 </p>
 
 
