@@ -1,6 +1,19 @@
 import numpy as np
 
 
+def sigmoid(arr):
+    """
+    Translate the input array into the range [0,1] through the
+        sigmoid activation function.
+
+    Parameters
+    ----------
+    arr: np.array
+        vector (m x 1)
+    """
+    return 1/(1+np.exp(-arr))
+
+
 def mode(arr):
     """
     Calculate the mode.

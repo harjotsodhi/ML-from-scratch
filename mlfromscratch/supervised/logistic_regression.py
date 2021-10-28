@@ -74,7 +74,7 @@ class Logistic_regression(object):
         '''
         # format np.arrays for regression
         X = hp.format_reg(X, normalized=self.normalized)
-        self.pred_prob = 1/(1+np.exp(-(X.dot(self.coef))))
+        self.pred_prob = hp.sigmoid(X.dot(self.coef))
         y_pred = np.where(self.pred_prob > self.threshold, 1, 0)
         return y_pred.flatten()
 
@@ -102,7 +102,7 @@ class Logistic_regression(object):
             response vector (m x 1)
         '''
         # prediction function
-        def gd_predict(X, coef): return 1/(1+np.exp(-(X.dot(coef))))
+        def gd_predict(X, coef): return hp.sigmoid(X.dot(coef))
         # MSE
         def gd_cost(m, y, y_pred): return (
                                             -y.T.dot(np.log(y_pred)) -
