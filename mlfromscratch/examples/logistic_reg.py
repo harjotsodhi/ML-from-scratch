@@ -1,6 +1,7 @@
 from ..supervised.logistic_regression import Logistic_regression
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as col
 from sklearn import datasets
 
 # Load the iris dataset
@@ -27,10 +28,18 @@ Z = Z.reshape(xx.shape)
 
 # Plot outputs
 fig, ax = plt.subplots(nrows=1, ncols=1)
-ax.pcolormesh(xx, yy, Z, shading='auto', cmap="tab20b")
-ax.scatter(X[:, 0], X[:, 1], c=y, edgecolors="k", cmap="tab20b")
+colors = ['tab:blue','tab:orange','tab:green']
+cMap = col.ListedColormap(colors)
+ax.pcolormesh(xx, yy, Z, shading='auto', cmap=cMap)
+cdict = {0:"Setosa", 1:"Versicolour", 2:"Virginica"}
+
+for i in np.unique(y):
+    ix = np.where(i == y)
+    ax.scatter(X[ix, 0], X[ix, 1], label = cdict[i], edgecolors="k", color=colors[i])
+
 ax.set_title("Multiclass logistic regression model")
 ax.set_xlabel("Sepal length")
 ax.set_ylabel("Sepal width")
+ax.legend()
 fig.savefig('mlfromscratch/examples/output/logistic_reg.png')
 plt.close(fig)
