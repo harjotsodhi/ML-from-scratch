@@ -1,6 +1,35 @@
 import numpy as np
 
 
+def one_hot_encoder(arr):
+    """
+    Transforms an (m x 1) array consisting of k unique categorical variables
+        to an (m x k) array where each column k_i is a binary response
+        variable w.r.t to the unique categorical variable k_i
+
+    Parameters
+    ----------
+    arr: np.array
+        vector (m x 1)
+    """
+    # check the number of classes to tell whether one-hot-encoding is needed
+    n_unique = np.unique(arr, return_counts=False)
+    k = n_unique.shape[0]
+
+    if k > 2:
+        # initialize a (m x k) matrix
+        mat = np.zeros((arr.shape[0], k))
+        for c in range(k):
+            mask = (arr[:,0]==n_unique[c])
+            mat[mask,c] = 1.
+
+        return mat
+
+    # if the number of classes is <=2 , then one-hot-encoding is not needed
+    else:
+        return arr
+
+
 def sigmoid(arr):
     """
     Translate the input array into the range [0,1] through the
