@@ -17,7 +17,7 @@ class Logistic_regression(object):
         determines whether or not an intercept is needed.
 
     threshold: float, default=0.5
-        probability threshold for classification
+        probability threshold for binary classification problems.
 
     learning_rate: float, default=0.01
         gradient descent step size (range 0-1)
@@ -86,7 +86,7 @@ class Logistic_regression(object):
         # assign each X_i to the class with its highest predicting probability
         if pred_prob.shape[1] == 1:
             # binary case
-            y_pred = np.where(pred_prob>0.5, 1, 0).flatten()
+            y_pred = np.where(pred_prob>self.threshold, 1, 0).flatten()
         else:
             # multi class case
             y_pred = np.argmax(pred_prob, axis=1)
