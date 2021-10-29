@@ -8,6 +8,8 @@ class Logistic_regression(object):
     """
     Logistic regression model.
 
+    For multiclass problems, the one-vs-rest (ovr) approach is used.
+
     Parameters
     ----------
     normalized: bool
@@ -56,11 +58,16 @@ class Logistic_regression(object):
         # format np.arrays for regression
         X,y = hp.format_reg(X, y, normalized=self.normalized)
 
-        # fit through gradient descent
-        coef = self._gd(X, y)
-
-        # extract coefficients
-        self.coef = coef
+        # apply a one-hot-encoder to the response variable
+        encoded = hp.one_hot_encoder(y)
+        # based on the output of one-hot-encoder, determine whether
+        # the one-vs-rest (ovr) approach is needed
+        self.coef = np.zeros((encoded.shape[1],X.shape[1]))
+        for c in range(encoded.shape[1]):
+            # solve each binary classification problem through gradient descent
+            y_c = encoded[:,c].reshape(-1,1)
+            coef_c = self._gd(X, y_c)
+            self.coef[c,:] = coef_c.flatten()
 
 
     def predict(self, X):
@@ -74,9 +81,17 @@ class Logistic_regression(object):
         '''
         # format np.arrays for regression
         X = hp.format_reg(X, normalized=self.normalized)
-        self.pred_prob = hp.sigmoid(X.dot(self.coef))
-        y_pred = np.where(self.pred_prob > self.threshold, 1, 0)
-        return y_pred.flatten()
+        # calculate the predicted probability of membership to each class
+        pred_prob = hp.sigmoid(X.dot(self.coef.T))
+        # assign each X_i to the class with its highest predicting probability
+        if pred_prob.shape[1] == 1:
+            # binary case
+            y_pred = np.where(pred_prob>0.5, 1, 0).flatten()
+        else:
+            # multi class case
+            y_pred = np.argmax(pred_prob, axis=1)
+
+        return y_pred
 
 
     ### Private methods ###
