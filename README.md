@@ -136,6 +136,38 @@ The resulting model can be seen visually below:
 </p>
 
 
+#### CART
+
+CART (classification and regression tree) is a supervised learning technique used
+for modeling discrete response (in the case of classification trees) or continuous
+response (in the case of regression tree) through decision trees.
+
+CART models are conceptually simple. The features, X, are sequentially
+split into two "branches" until the observations have been split in sufficiently
+homogeneous groups (or a specified max depth). CART models are considered
+non-parametric learning algorithms, as the number of parameters in the model is not
+pre-specified, and is rather based upon the data and will generally increase as
+the size of the training data increases.
+
+There are a variety of different splitting criteria, for determining which feature
+to split the dataset into next. In general, we want to use a splitting criteria
+which maximizes the reduction our uncertainty, and is therefore "best." For classification
+trees, [Entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory) is commonly used.
+
+CART models will often do very well at predicting training data (especially when
+the model has no limitations on max number of splits) but are prone to overfitting.
+
+In this implementation, CART models are built recursively. Using them is very easy,
+an example implementation of a classification tree is provided below:
+
+```python
+from supervised.cart import Classification_tree
+# example of fitting the classification tree
+clf = Classification_tree(leaf_size=1)
+clf.fit(X, y)
+y_pred = clf.predict(Z)
+```
+
 ## Contact
 Email: harjotsodhi17@gmail.com
 
