@@ -143,16 +143,17 @@ for modeling discrete response (in the case of classification trees) or continuo
 response (in the case of regression tree) through decision trees.
 
 CART models are conceptually simple. The features, X, are sequentially
-split into two "branches" until the observations have been split in sufficiently
-homogeneous groups (or a specified max depth). CART models are considered
+split into two "branches" until the observations have been split into sufficiently
+homogeneous groups (or a specified max depth is reached). CART models are considered
 non-parametric learning algorithms, as the number of parameters in the model is not
 pre-specified, and is rather based upon the data and will generally increase as
 the size of the training data increases.
 
-There are a variety of different splitting criteria, for determining which feature
+There are a variety of different splitting criteria for determining which feature
 to split the dataset into next. In general, we want to use a splitting criteria
-which maximizes the reduction our uncertainty, and is therefore "best." For classification
-trees, [Entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory) is commonly used.
+which maximizes the reduction in uncertainty, and is therefore "best." For classification
+trees, [Entropy](https://en.wikipedia.org/wiki/Entropy#Information_theory) is commonly used,
+and is used in this implementation.
 
 CART models will often do very well at predicting training data (especially when
 the model has no limitations on max number of splits) but are prone to overfitting.
@@ -166,6 +167,33 @@ from supervised.cart import Classification_tree
 clf = Classification_tree(leaf_size=1)
 clf.fit(X, y)
 y_pred = clf.predict(Z)
+```
+
+#### Random Forest
+
+Random Forest is an ensemble, supervised learning technique which builds upon
+CART models. In the Random Forest algorithm, N decision trees are trained
+upon M [bootstrapped](https://en.wikipedia.org/wiki/Bootstrap_aggregating) versions
+of the original data set. For classification, the overall prediction is then the mode
+of the N decision trees. For regression, the overall prediction is is the mean
+prediction of the N decision trees.
+
+Random Forest addresses the biggest shortfall of decision trees: overfitting.
+Random Forest tends to perform better out-of-sample than decision trees because
+each tree has been trained on a different version of the training data and thus
+the variance of the overall model is reduced when averages are taken across the
+N trees.
+
+In this implementation, Random Forest models are built using N CART models
+defined and implemented in the previous section. An example implementation of
+a Random Forest built using 100 decision trees is provided below:
+
+```python
+from supervised.random_forest import Random_forest
+# example of fitting the Random Forest
+rf = Random_forest(num_trees=100)
+rf.fit(X_train,y_train)
+y_pred = rf.predict(X_test)
 ```
 
 ## Contact
