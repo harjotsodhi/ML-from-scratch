@@ -29,8 +29,8 @@ class Logistic_regression(object):
         absolute convergence tolerance for solver.
         end if: |cost_{n+1} - cost_{n}| < abs_tol
     """
-    def __init__(self, method="gradient_descent", normalized=False,
-                 threshold=0.5, learning_rate=0.01, max_iter=1000, abs_tol=1e-9):
+    def __init__(self,normalized=False, threshold=0.5, learning_rate=0.01,
+                 max_iter=1000, abs_tol=1e-9):
         try:
             learning_rate <= 1
             learning_rate >= 0
