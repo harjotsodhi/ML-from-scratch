@@ -196,6 +196,32 @@ rf.fit(X_train,y_train)
 y_pred = rf.predict(X_test)
 ```
 
+### Unsupervised Learning
+
+#### K-means
+
+K-means is an unsupervised learning technique used for dividing observations
+into K clusters. The objective of K-means is to cluster the observations
+into as "close" groups as possible. Where "close" is the distance of each
+observation to the mean its cluster (centroid).
+
+The parameters of the K-means model (i.e., the centroids) in this implementation
+are solved for through the Lloyd's algorithm, which is an iterative approach
+whereby clusters are refined after iteration following random initialization.
+
+In the K-means model, "k" is a hyperparameter representing the number of clusters
+in the data.
+
+```python
+from unsupervised.kmeans import K_means
+# example of k-means with 3 clusters
+clf = K_means(num_clusters=3)
+# unsupervised algorithm so no y vector
+clf.fit(X)
+y_pred = clf.predict(X)
+```
+
+
 ## Contact
 Email: harjotsodhi17@gmail.com
 
