@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn import decomposition
 from sklearn.datasets import load_iris
-from ..unsupervised.pca import PCA
-from ..helpers import helpers as hp
+from mlfromscratch.unsupervised.pca import PCA
+from mlfromscratch.helpers import helpers as hp
 
 
 def test():

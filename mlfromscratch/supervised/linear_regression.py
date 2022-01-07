@@ -1,6 +1,6 @@
 import numpy as np
-from ..solvers.gradient_descent import Gradient_descent
-from ..helpers import helpers as hp
+from mlfromscratch.solvers.gradient_descent import *
+from mlfromscratch.helpers import helpers as hp
 
 
 

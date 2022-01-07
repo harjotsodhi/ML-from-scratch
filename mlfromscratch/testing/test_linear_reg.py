@@ -1,4 +1,4 @@
-from ..supervised.linear_regression import Linear_regression
+from mlfromscratch.supervised.linear_regression import Linear_regression
 import numpy as np
 from sklearn.linear_model import LinearRegression as sklearn_lm
 from sklearn.datasets import make_regression

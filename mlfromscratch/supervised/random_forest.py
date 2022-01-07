@@ -1,6 +1,6 @@
 import numpy as np
-from ..helpers import helpers as hp
-from .cart import Classification_tree
+from mlfromscratch.helpers import helpers as hp
+from mlfromscratch.cart import Classification_tree
 
 
 
@@ -80,7 +80,7 @@ class Random_forest(object):
             feature matrix (m x n)
         '''
         np.random.seed(self.seed)
-        
+
         if not self.num_samples:
             self.num_samples = X.shape[0]
 

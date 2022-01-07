@@ -1,4 +1,4 @@
-from ..supervised.random_forest import Random_forest
+from mlfromscratch.supervised.random_forest import Random_forest
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import load_iris

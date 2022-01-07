@@ -1,4 +1,4 @@
-from ..supervised.cart import Classification_tree
+from mlfromscratch.supervised.cart import Classification_tree
 import numpy as np
 from sklearn import tree
 from sklearn.datasets import load_iris

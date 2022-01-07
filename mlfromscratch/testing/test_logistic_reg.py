@@ -1,4 +1,4 @@
-from ..supervised.logistic_regression import Logistic_regression
+from mlfromscratch.supervised.logistic_regression import Logistic_regression
 import numpy as np
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split

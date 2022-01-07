@@ -1,5 +1,5 @@
 import numpy as np
-from ..helpers import helpers as hp
+from mlfromscratch.helpers import helpers as hp
 
 
 
