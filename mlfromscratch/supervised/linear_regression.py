@@ -32,11 +32,6 @@ class Linear_regression(object):
         if method not in ("least_squares", "gradient_descent"):
             raise ValueError('Method param must be "least_squares" or "gradient_descent"')
         self.method = method
-        try:
-            learning_rate <= 1
-            learning_rate >= 0
-        except:
-            raise ValueError("Learning rate must be between 0-1")
         self.learning_rate = learning_rate
         self.max_iter = max_iter
         self.abs_tol = abs_tol
@@ -82,7 +77,7 @@ class Linear_regression(object):
             feature matrix (m x n)
         '''
         # format np.arrays for regression
-        X = hp.format_reg(X, normalized=self.normalized)
+        X,_ = hp.format_reg(X, normalized=self.normalized)
         y_pred = X.dot(self.coef)
         return y_pred.flatten()
 

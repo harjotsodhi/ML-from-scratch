@@ -30,16 +30,9 @@ class Gradient_descent(object):
     """
     def __init__(self, gradient, cost, predict,
                  learning_rate, max_iter, abs_tol):
-        try:
-            callable(gradient)
-            callable(cost)
-            callable(predict)
-        except:
-            raise ValueError("Gradient, cost, and predict params must be functions")
-
-        self.gradient_func = gradient
-        self.cost_func = cost
-        self.predict_func = predict
+        if [f for f in (gradient,cost,predict) if not callable(f)]: raise ValueError("Gradient, cost, and predict params must be functions")
+        self.gradient_func,self.cost_func,self.predict_func = gradient,cost,predict
+        if not 0 <= learning_rate <= 1: raise ValueError("Learning rate must be between 0-1")
         self.learning_rate = learning_rate
         self.max_iter = max_iter
         self.abs_tol = abs_tol

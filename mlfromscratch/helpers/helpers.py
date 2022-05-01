@@ -98,7 +98,7 @@ def format_reg(X, y=None, normalized=False):
 
     # reshape y, for matrix algebra, if y provided
     if y is None:
-        return X
+        return X,None
     else:
         try:
             y.shape[1] == 1
